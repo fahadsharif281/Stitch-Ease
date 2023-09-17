@@ -1,0 +1,26 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    height: auto;
+    padding: 10px 100px;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+
+    .linkContainer{
+        align-items: center;
+        display: flex;
+    }
+    .linkContainer > *{
+       margin: 0px 25px;
+    }
+    .linkContainer > Button{
+      background-color: black;
+      color: white;
+      border: 1px solid black;
+      &:active{
+        background-color: black;
+      }
+    }
+}

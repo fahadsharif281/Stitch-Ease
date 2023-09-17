@@ -1,0 +1,36 @@
+.container{
+    .heading{
+        font-size: 75px;
+        text-align: center;
+        font-style: italic;
+    }
+    .section{
+        background-color: black;
+        color: white;
+        padding: 15px 40px;
+        text-align: center;
+    }
+    .customer_heading{
+        font-size: 60px;
+        text-align: center;
+    }
+    .customers{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+
+    }
+    .customers_contain{
+        margin-right: 100px;
+    }
+    .customers_reviews{
+        max-width: 250px;
+        text-align: center;
+    }
+    .customers_img{
+        border-radius: 10px;
+        border: 1px solid white;
+    }
+}

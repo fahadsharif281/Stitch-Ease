@@ -1,0 +1,26 @@
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: #242323;
+    color: white;
+    padding: 60px;
+
+    .social_links{
+        img{
+            margin: 20px 10px;
+            cursor: pointer;
+        }
+    }
+    .submit_button{
+        margin-top: 10px;
+        background-color: black;
+        color: white;
+        border: 1px solid black;
+        &:active{
+            background-color: black;
+            border: 1px solid black;
+            color: white;
+        }
+    }
+}

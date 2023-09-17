@@ -1,0 +1,10 @@
+.contain{
+    flex-wrap: nowrap;
+    padding: 50px;
+    display: flex;
+
+    img{
+        object-fit: contain;
+        margin-right: 20px;
+    }
+}

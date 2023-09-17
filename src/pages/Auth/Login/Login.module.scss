@@ -1,0 +1,28 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+
+    .form{
+        padding: 100px 0px;
+        width: 300px;
+    }
+    
+    .submit{
+        background-color: black;
+        color: white;
+        border: 1px solid black;
+        margin-top: 20px;
+        width: 100%;
+
+        &:active{
+            background-color: black;
+            color: white;
+            border: 1px solid black;
+        }
+    }
+
+
+}
