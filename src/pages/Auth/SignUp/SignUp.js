@@ -17,7 +17,7 @@ const SignUp = () => {
             confirmPassword: '',
             address: '',
             phone: '',
-            role: { value: 'Taylor', label: 'Taylor' }
+            role: { value: 'Tailor', label: 'Tailor' }
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email('Invalid email')
@@ -39,7 +39,7 @@ const SignUp = () => {
         }
     })
     const options = [
-        { value: 'Taylor', label: 'Taylor' },
+        { value: 'Tailor', label: 'Tailor' },
         { value: 'Customer', label: 'Customer' },
     ]
 

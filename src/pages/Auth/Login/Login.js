@@ -15,7 +15,7 @@ const Login = () => {
         initialValues: {
             email: '',
             password: '',
-            role: { value: 'Taylor', label: 'Taylor' }
+            role: { value: 'Tailor', label: 'Tailor' }
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email('Invalid email')
@@ -33,7 +33,7 @@ const Login = () => {
         }
     })
     const options = [
-        { value: 'Taylor', label: 'Taylor' },
+        { value: 'Tailor', label: 'Tailor' },
         { value: 'Customer', label: 'Customer' },
     ]
 
