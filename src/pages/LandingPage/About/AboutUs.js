@@ -43,9 +43,9 @@ export const AboutUs = () => {
                 </p>
                 <p className={classes.customer_heading}>Our Satisfied Customers</p>
                 <div className={classes.customers}>
-                    {customers.map((item) => {
+                    {customers.map((item, index) => {
                         return (
-                            <div className={classes.customers_contain}>
+                            <div key={index} className={classes.customers_contain}>
                                 <img className={classes.customers_img} src={item.src} width='250px' />
                                 <p className={classes.customers_reviews}>{item.review}</p>
                             </div>

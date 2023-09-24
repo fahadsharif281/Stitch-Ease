@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from '../../../assets/images/jpeg/stitch_logo.jpeg';
 import classes from './Login.module.scss';
 import Input from '../../../components/Input/Input';
@@ -37,7 +37,10 @@ const Login = () => {
         { value: 'Customer', label: 'Customer' },
     ]
 
-    console.log('formik.touched.email :', formik.touched.email, formik.errors.email)
+    useEffect(() => {
+        dispatch(setUser(''))
+    }, [])
+
     return (
         <div className={classes.container}>
             <form onSubmit={(e) => {
