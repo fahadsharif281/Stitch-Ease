@@ -17,7 +17,8 @@ const SignUp = () => {
             confirmPassword: '',
             address: '',
             phone: '',
-            role: { value: 'Tailor', label: 'Tailor' }
+            role: { value: 'Tailor', label: 'Tailor' },
+            cnic: ''
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email('Invalid email')
@@ -31,7 +32,8 @@ const SignUp = () => {
             confirmPassword: Yup.string().required('Required')
                 .oneOf([Yup.ref('password'), null], 'Confirm password must match with password'),
             address: Yup.string().required('Required').min(5, 'Minium 5 characters required').max(50, 'Cannot exceed 50 characters'),
-            phone: Yup.string().required('Required')
+            phone: Yup.string().required('Required'),
+            cnic: Yup.string().required('Required')
         }),
         onSubmit: (values) => {
             console.log('values:', values);
@@ -86,6 +88,17 @@ const SignUp = () => {
                     onBlur={formik.handleBlur('address')}
                     error={formik.touched.address && formik.errors.address && formik.errors.address}
                 />
+                {formik.values.role.value === 'Tailor' &&
+                    <Input
+                        label={'CNIC'}
+                        type='text'
+                        placeholder='####-######-#'
+                        value={formik.values.cnic}
+                        onChange={formik.handleChange('cnic')}
+                        onBlur={formik.handleBlur('cnic')}
+                        error={formik.touched.cnic && formik.errors.cnic && formik.errors.cnic}
+                    />
+                }
 
                 <PhoneInputField
                     label={'Phone'}

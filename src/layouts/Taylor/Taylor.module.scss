@@ -1,0 +1,70 @@
+@import '../../utils/variables/colors.scss';
+
+.container {
+    width: 100%;
+    display: flex;
+
+    .side_bar {
+        width: 20%;
+
+        .image_container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .items {
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .item {
+                text-decoration: none;
+                color: black;
+                cursor: pointer;
+                width: 100%;
+                display: flex;
+                padding: 15px;
+
+                img {
+                    margin-right: 5px;
+                }
+
+                .link {}
+            }
+
+            .item_active {
+                text-decoration: none;
+                color: black;
+                cursor: pointer;
+                width: 100%;
+                display: flex;
+                padding: 15px;
+
+                background-color: $color_primary;
+                border-radius: 10px;
+
+                img {
+                    margin-right: 5px;
+                }
+
+                .link {}
+            }
+        }
+    }
+
+    .content {
+        width: 100%;
+
+        .search_bar {
+            margin: 20px 200px;
+        }
+
+        .outlet {
+            padding: 30px 40px;
+            background-color: #e6e6e6;
+        }
+    }
+
+}

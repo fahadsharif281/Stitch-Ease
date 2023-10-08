@@ -1,3 +1,4 @@
+@import '../../../utils/variables/colors.scss';
 .container {
     display: flex;
     flex-direction: column;
@@ -11,16 +12,16 @@
     }
 
     .submit {
-        background-color: black;
-        color: white;
-        border: 1px solid black;
+        background-color: $color_primary;
+        color: $color_secondary;
+        border: 1px solid $color_primary;
         margin-top: 20px;
         width: 100%;
 
         &:active {
-            background-color: black;
-            color: white;
-            border: 1px solid black;
+            background-color: $color_primary;
+            color: $color_secondary;
+            border: 1px solid $color_primary;
         }
     }
 

@@ -8,9 +8,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../../redux/reducers/auth/authReducer';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -28,18 +30,14 @@ const Login = () => {
                 )
         }),
         onSubmit: (values) => {
-            console.log('values:', values)
             dispatch(setUser(values))
+            navigate('/tailor/home')
         }
     })
     const options = [
         { value: 'Tailor', label: 'Tailor' },
         { value: 'Customer', label: 'Customer' },
     ]
-
-    useEffect(() => {
-        dispatch(setUser(''))
-    }, [])
 
     return (
         <div className={classes.container}>

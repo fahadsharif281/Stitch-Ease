@@ -1,3 +1,4 @@
+@import '../../../utils//variables/colors.scss';
 .container{
     display: flex;
     justify-content: space-between;
@@ -16,11 +17,11 @@
        margin: 0px 25px;
     }
     .linkContainer > Button{
-      background-color: black;
+      background-color: $color_primary;
       color: white;
-      border: 1px solid black;
+      border: 1px solid $color_primary;
       &:active{
-        background-color: black;
+        background-color: $color_primary;
       }
     }
 }
