@@ -6,11 +6,12 @@ import Select from 'react-select'
 import { Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../../redux/reducers/auth/authReducer';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const { user } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const formik = useFormik({
@@ -38,6 +39,16 @@ const Login = () => {
         { value: 'Tailor', label: 'Tailor' },
         { value: 'Customer', label: 'Customer' },
     ]
+
+    useEffect(() => {
+        if (user?.role.value === 'Tailor') {
+            navigate('/tailor/home');
+        } else
+            if (user?.role.value === 'Customer') {
+                navigate('/customer/home')
+            }
+            else { }
+    }, [])
 
     return (
         <div className={classes.container}>

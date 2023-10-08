@@ -1,13 +1,17 @@
 import React from 'react';
 import classes from './Taylor.module.scss';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/jpeg/stitch_logo.jpeg';
 import home from '../../assets/images/png/home.png';
 import logout from '../../assets/images/png/logout.png';
 import orders from '../../assets/images/png/orders.png';
 import { Nav } from 'react-bootstrap';
 import Input from '../../components/Input/Input';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/reducers/auth/authReducer';
 export const TaylorLayout = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     let items = [
         {
             name: 'Home',
@@ -41,7 +45,11 @@ export const TaylorLayout = () => {
                         )
                     })}
 
-                    <Nav.Item className={classes.item}>
+                    <Nav.Item onClick={() => {
+                        dispatch(setUser(undefined));
+                        navigate('/login')
+
+                    }} className={classes.item}>
                         <img src={logout} width='23px' height='23px' />
                         <Nav.Link className={classes.link} eventKey="2" title="Item">
                             Logout
