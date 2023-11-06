@@ -1,4 +1,5 @@
 @import '../../../utils/variables/colors.scss';
+
 .container {
     display: flex;
     flex-direction: column;
@@ -32,6 +33,4 @@
         font-style: italic;
         color: darkslateblue;
     }
-
-
 }

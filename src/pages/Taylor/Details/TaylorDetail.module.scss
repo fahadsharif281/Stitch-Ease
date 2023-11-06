@@ -1,0 +1,25 @@
+.container {
+    .label {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 32px;
+    }
+
+    .plan_cards {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        .plan {
+            display: flex;
+            margin-right: 40px;
+        }
+
+        .body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+}

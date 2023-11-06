@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Taylor.module.scss';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/jpeg/stitch_logo.jpeg';
@@ -7,11 +7,14 @@ import logout from '../../assets/images/png/logout.png';
 import orders from '../../assets/images/png/orders.png';
 import { Nav } from 'react-bootstrap';
 import Input from '../../components/Input/Input';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/reducers/auth/authReducer';
+import { Avatar, MenuItem, Badge } from '@mui/material';
 export const TaylorLayout = () => {
     const dispatch = useDispatch();
+    const { user } = useSelector(state => state.auth)
     const navigate = useNavigate();
+    const [openMenu, setOpenMenu] = useState(false);
     let items = [
         {
             name: 'Home',
@@ -23,9 +26,16 @@ export const TaylorLayout = () => {
             name: 'Orders',
             src: orders,
             key: 'Favorite',
-            to: '/tailor/orders'
+            to: '/tailor/orders',
+            badge: 4
         }
     ]
+    const handleClick = () => {
+        setOpenMenu(!openMenu)
+    }
+    const handleSelect = () => {
+        setOpenMenu(!openMenu)
+    }
     return (
         <div className={classes.container}>
             <div className={classes.side_bar}>
@@ -39,6 +49,9 @@ export const TaylorLayout = () => {
                                 className={({ isActive }) =>
                                     isActive ? classes.item_active : classes.item
                                 }>
+                                {item?.badge &&
+                                    <Badge badgeContent={4} color='primary' />
+                                }
                                 <img src={item.src} width='23px' height='23px' />
                                 <div className={classes.link}>{item.name}</div>
                             </NavLink>
@@ -58,11 +71,19 @@ export const TaylorLayout = () => {
                 </div>
             </div>
             <div className={classes.content}>
-                <div className={classes.search_bar}>
-                    <Input
-                        type='text'
-                        placeholder='Search ...'
-                    />
+                <div className={classes.header_flex}>
+                    <div className={classes.search_bar}>
+                        <Input
+                            type='text'
+                            placeholder='Search ...'
+                        />
+                    </div>
+                    <div className={classes.profile}>
+                        <Avatar onClick={handleClick} className={classes.avatar}>{user?.name[0].toUpperCase()}</Avatar>
+                        <div className={openMenu ? classes.open_menu : classes.close_menu}>
+                            <MenuItem onClick={handleSelect}>Edit Profile</MenuItem>
+                        </div>
+                    </div>
                 </div>
                 <div className={classes.outlet}>
                     <Outlet />

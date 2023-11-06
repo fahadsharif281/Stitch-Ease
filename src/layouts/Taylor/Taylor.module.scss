@@ -55,9 +55,37 @@
     }
 
     .content {
-        width: 100%;
+        width: 80%;
+
+        .header_flex {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+        }
+
+        .profile {
+            position: relative;
+
+            .avatar {
+                cursor: pointer;
+                margin: 0px 15px;
+            }
+
+            .open_menu {
+                right: 0;
+                z-index: 9;
+                position: absolute;
+                background-color: white;
+                box-shadow: 0px 0px 2px 0px rgb(193, 193, 193);
+            }
+
+            .close_menu {
+                display: none;
+            }
+        }
 
         .search_bar {
+            width: 100%;
             margin: 20px 200px;
         }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from '../../../assets/images/jpeg/stitch_logo.jpeg';
 import classes from './SignUp.module.scss';
 import Input from '../../../components/Input/Input';
@@ -8,8 +8,13 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PhoneInputField from '../../../components/PhoneInput/PhoneInput';
 import { useNavigate } from 'react-router-dom';
+import useFirebase from '../../../utils/hooks/useFirebase';
+import { collection, getFirestore, doc, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 const SignUp = () => {
     const navigate = useNavigate();
+    const { signUpWithEmailAndPassword, app } = useFirebase();
+    const db = getFirestore(app);
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -18,7 +23,8 @@ const SignUp = () => {
             address: '',
             phone: '',
             role: { value: 'Tailor', label: 'Tailor' },
-            cnic: ''
+            cnic: '',
+            fullName: ''
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email('Invalid email')
@@ -33,11 +39,40 @@ const SignUp = () => {
                 .oneOf([Yup.ref('password'), null], 'Confirm password must match with password'),
             address: Yup.string().required('Required').min(5, 'Minium 5 characters required').max(50, 'Cannot exceed 50 characters'),
             phone: Yup.string().required('Required'),
-            cnic: Yup.string().required('Required')
+            cnic: Yup.string().required('Required'),
+            fullName: Yup.string().required('Required')
         }),
-        onSubmit: (values) => {
-            console.log('values:', values);
-            navigate('/login')
+        onSubmit: async (values) => {
+            signUpWithEmailAndPassword(values.email, values.password).then((res) => {
+                const userCollection = collection(db, "users");
+                const userDocRef = doc(userCollection, res.user.uid); // Assuming 'res.user.uid' holds the UID
+                setDoc(userDocRef, {
+                    email: res.user.email,
+                    address: values.address,
+                    cnic: values.cnic,
+                    phone: values.phone,
+                    role: values.role.value,
+                    name: values.fullName
+                })
+                toast.success("User Registered Successfully", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+                navigate('/login')
+            }).catch((error) => {
+                toast.error(`(${error.message.split('/')[1]}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+            })
         }
     })
     const options = [
@@ -87,6 +122,15 @@ const SignUp = () => {
                     onChange={formik.handleChange('address')}
                     onBlur={formik.handleBlur('address')}
                     error={formik.touched.address && formik.errors.address && formik.errors.address}
+                />
+                <Input
+                    label={'Full Name'}
+                    type='text'
+                    placeholder='John Alex'
+                    value={formik.values.fullName}
+                    onChange={formik.handleChange('fullName')}
+                    onBlur={formik.handleBlur('fullName')}
+                    error={formik.touched.fullName && formik.errors.fullName && formik.errors.fullName}
                 />
                 {formik.values.role.value === 'Tailor' &&
                     <Input

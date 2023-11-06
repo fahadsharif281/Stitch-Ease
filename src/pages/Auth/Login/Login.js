@@ -3,22 +3,27 @@ import logo from '../../../assets/images/jpeg/stitch_logo.jpeg';
 import classes from './Login.module.scss';
 import Input from '../../../components/Input/Input';
 import Select from 'react-select'
-import { Button } from 'react-bootstrap';
+import { Button, Nav } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../../redux/reducers/auth/authReducer';
 import { useNavigate } from 'react-router-dom';
+import useFirebase from '../../../utils/hooks/useFirebase';
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { toast } from 'react-toastify';
+
 
 const Login = () => {
     const { user } = useSelector(state => state.auth);
+    const { loginWithEmailAndPassword, app } = useFirebase();
+    const db = getFirestore(app);
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const formik = useFormik({
         initialValues: {
             email: '',
-            password: '',
-            role: { value: 'Tailor', label: 'Tailor' }
+            password: ''
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email('Invalid email')
@@ -30,15 +35,34 @@ const Login = () => {
                     "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
                 )
         }),
-        onSubmit: (values) => {
-            dispatch(setUser(values))
-            navigate('/tailor/home')
+        onSubmit: async (values) => {
+            loginWithEmailAndPassword(values.email, values.password).then((response) => {
+                getDoc(doc(db, "users", response.user.uid)).then((res) => {
+                    toast.success("Login Successfully", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                    })
+                    dispatch(setUser(res?.data()))
+                    navigate('/tailor/home')
+                }).catch((error) => {
+                    console.log('error handling:', error)
+                });
+            }).catch((error) => {
+                toast.error(`(${error.message.split('/')[1]}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+            })
         }
     })
-    const options = [
-        { value: 'Tailor', label: 'Tailor' },
-        { value: 'Customer', label: 'Customer' },
-    ]
 
     useEffect(() => {
         if (user?.role.value === 'Tailor') {
@@ -75,16 +99,8 @@ const Login = () => {
                     onBlur={formik.handleBlur('password')}
                     error={formik.touched.password && formik.errors.password && formik.errors.password}
                 />
-                <Select
-                    onChange={(e) => {
-                        formik.setFieldValue('role', {
-                            value: e.value,
-                            label: e.label
-                        })
-                    }}
-                    value={formik.values.role}
-                    options={options} />
                 <Button type='submit' className={classes.submit}>Log In</Button>
+                <Nav.Link className={classes.new_user} onClick={() => navigate('/signup')}>Register New User?</Nav.Link>
             </form>
         </div>
     )
