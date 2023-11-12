@@ -1,0 +1,40 @@
+@import '../../../utils/variables/colors.scss';
+
+.container {
+    margin: 0px 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 60px;
+    box-sizing: border-box;
+    background-color: white;
+    box-shadow: 0px 0px 18px 0px $color_primary;
+
+    .form {
+        padding: 100px 0px;
+        width: 300px;
+    }
+
+    .submit {
+        background-color: $color_primary;
+        color: $color_secondary;
+        border: 1px solid $color_primary;
+        margin-top: 20px;
+        width: 100%;
+
+        &:active {
+            background-color: $color_primary;
+            color: $color_secondary;
+            border: 1px solid $color_primary;
+        }
+    }
+
+    .already_member {
+        margin: 20px 0px 0px;
+        text-align: center;
+        text-decoration: underline;
+        font-style: italic;
+        color: darkslateblue;
+    }
+}

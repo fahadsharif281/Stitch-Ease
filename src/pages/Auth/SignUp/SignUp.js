@@ -43,6 +43,7 @@ const SignUp = () => {
             fullName: Yup.string().required('Required')
         }),
         onSubmit: async (values) => {
+            console.log('123')
             signUpWithEmailAndPassword(values.email, values.password).then((res) => {
                 const userCollection = collection(db, "users");
                 const userDocRef = doc(userCollection, res.user.uid); // Assuming 'res.user.uid' holds the UID

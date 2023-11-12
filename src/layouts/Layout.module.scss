@@ -1,10 +1,10 @@
-@import '../../utils/variables/colors.scss';
+@import '../utils/variables/colors.scss';
 
 .container {
     width: 100%;
     display: flex;
 
-    .side_bar {
+    .tailor_side_bar {
         width: 20%;
 
         .image_container {
@@ -54,6 +54,62 @@
         }
     }
 
+    .customer_side_bar {
+        width: 20%;
+        background-color: $color_primary;
+
+        .image_container {
+            display: flex;
+            justify-content: center;
+            background-color: $color_secondary;
+
+            img {
+                cursor: pointer;
+            }
+        }
+
+        .items {
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .item {
+                text-decoration: none;
+                color: black;
+                cursor: pointer;
+                width: 100%;
+                display: flex;
+                padding: 15px;
+
+                img {
+                    margin-right: 5px;
+                }
+
+                .link {}
+            }
+
+            .item_active {
+                text-decoration: none;
+                color: black;
+                cursor: pointer;
+                width: 100%;
+                display: flex;
+                padding: 15px;
+
+                background-color: $color_secondary;
+                border-radius: 10px;
+
+                img {
+                    margin-right: 5px;
+                }
+
+                .link {}
+            }
+        }
+    }
+
     .content {
         width: 80%;
 
@@ -87,6 +143,22 @@
         .search_bar {
             width: 100%;
             margin: 20px 200px;
+        }
+
+        .cart {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .not_verified {
+            width: 200px;
+            background-color: red;
+            border: 1px solid red;
+
+            :active {
+                background-color: red;
+                border: 1px solid red;
+            }
         }
 
         .outlet {

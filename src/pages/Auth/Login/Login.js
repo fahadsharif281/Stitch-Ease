@@ -46,8 +46,11 @@ const Login = () => {
                         pauseOnHover: true,
                         draggable: true,
                     })
-                    dispatch(setUser(res?.data()))
-                    navigate('/tailor/home')
+                    let getUserData = res?.data();
+                    dispatch(setUser(getUserData))
+                    { getUserData?.role === 'Tailor' && navigate('/tailor/home') }
+                    { getUserData?.role === 'Customer' && navigate('/customer/home') }
+
                 }).catch((error) => {
                     console.log('error handling:', error)
                 });

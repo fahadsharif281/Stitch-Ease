@@ -1,0 +1,50 @@
+@import '../../../../utils/variables/colors.scss';
+
+.container {
+    .label {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 32px;
+    }
+
+    .heading {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .selection {
+        margin-left: 8px;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .approve {
+        background-color: $color_primary;
+        color: $color_secondary;
+        border: 1px solid $color_primary;
+        margin-top: 20px;
+
+        &:active {
+            background-color: $color_primary;
+            color: $color_secondary;
+            border: 1px solid $color_primary;
+        }
+    }
+
+    .cancel {
+        background-color: black;
+        color: $color_secondary;
+        border: 1px solid;
+        margin-top: 20px;
+        margin-left: 4px;
+
+        &:active {
+            background-color: black;
+            color: $color_secondary;
+            border: 1px solid;
+        }
+    }
+}
