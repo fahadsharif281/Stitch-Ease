@@ -1,0 +1,18 @@
+@import '../../utils/variables/colors.scss';
+
+.container {
+    padding: 32px;
+
+    .submit {
+        background-color: $color_primary;
+        color: $color_secondary;
+        border: 1px solid $color_primary;
+        margin-top: 20px;
+
+        &:active {
+            background-color: $color_primary;
+            color: $color_secondary;
+            border: 1px solid $color_primary;
+        }
+    }
+}

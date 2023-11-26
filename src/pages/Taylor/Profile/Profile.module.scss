@@ -1,28 +1,29 @@
 @import '../../../utils/variables/colors.scss';
 
 .container {
-    .label {
-        font-size: 28px;
-        font-weight: 600;
-
-    }
-
-    .stepper {
-        margin-bottom: 32px;
-    }
 
     .flex {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: baseline;
+    }
+
+    .label {
+        font-size: 28px;
+        font-weight: 600;
         margin-bottom: 32px;
     }
 
-    .add_cart {
+    .stepper {
+        margin-bottom: 32px;
+
+    }
+
+    .add_work {
         background-color: $color_primary;
         color: $color_secondary;
         border: 1px solid $color_primary;
-
+        margin-top: 20px;
 
         &:active {
             background-color: $color_primary;
@@ -54,8 +55,6 @@
             //     font-weight: 500;
             // }
         }
-
-
 
         .body {
             display: flex;

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import logo from '../../../assets/images/jpeg/stitch_logo.jpeg';
 import classes from './Login.module.scss';
 import Input from '../../../components/Input/Input';
-import Select from 'react-select'
 import { Button, Nav } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -47,7 +46,10 @@ const Login = () => {
                         draggable: true,
                     })
                     let getUserData = res?.data();
-                    dispatch(setUser(getUserData))
+                    dispatch(setUser({
+                        ...getUserData,
+                        id: response.user.uid
+                    }))
                     { getUserData?.role === 'Tailor' && navigate('/tailor/home') }
                     { getUserData?.role === 'Customer' && navigate('/customer/home') }
 
@@ -68,10 +70,10 @@ const Login = () => {
     })
 
     useEffect(() => {
-        if (user?.role.value === 'Tailor') {
+        if (user?.role?.value === 'Tailor') {
             navigate('/tailor/home');
         } else
-            if (user?.role.value === 'Customer') {
+            if (user?.role?.value === 'Customer') {
                 navigate('/customer/home')
             }
             else { }

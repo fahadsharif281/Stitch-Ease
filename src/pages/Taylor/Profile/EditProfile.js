@@ -6,16 +6,18 @@ import { Button, Nav } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PhoneInputField from '../../../components/PhoneInput/PhoneInput';
-import { useNavigate } from 'react-router-dom';
 import useFirebase from '../../../utils/hooks/useFirebase';
-import { getFirestore } from 'firebase/firestore';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import classes from './EditProfile.module.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../../redux/reducers/auth/authReducer';
 
 const EditProfile = () => {
-    const { signUpWithEmailAndPassword, app } = useFirebase();
+    const { user } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const { app } = useFirebase();
     const db = getFirestore(app);
-    const { user } = useSelector(state => state.auth)
+    const documentRef = doc(db, 'users', user?.id)
     const formik = useFormik({
         initialValues: {
             address: user?.address || '',
@@ -28,7 +30,14 @@ const EditProfile = () => {
             cnic: Yup.string().required('Required'),
         }),
         onSubmit: async (values) => {
-            console.log(values)
+            const updateUser = {
+                ...user,
+                address: values?.address,
+                phone: values?.phone,
+                cnic: values?.cnic
+            }
+            setDoc(documentRef, updateUser);
+            dispatch(setUser(updateUser));
         }
     })
 

@@ -1,24 +1,141 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import classes from './OrderDetails.module.scss';
 import { Button } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
+import useFirebase from '../../../../utils/hooks/useFirebase';
+import { setUser } from '../../../../redux/reducers/auth/authReducer';
 
 const OrderDetails = () => {
     const { user } = useSelector(state => state.auth);
+    const [orderDetails, setOrderDetails] = useState();
+    const dispatch = useDispatch();
+    const { app } = useFirebase();
+    const db = getFirestore(app);
+    const documentRef = doc(db, 'users', user?.id);
+    const { id } = useParams();
+    useEffect(() => {
+        user?.orders?.filter((item) => {
+            if (item.orderId === id) {
+                setOrderDetails(item);
+            }
+            return item
+        })
+    }, []);
+    const handleUpdateStatus = (statusToUpdate) => {
+        const updatedOrders = user?.orders?.map((order) => {
+            if (order?.orderId === id) {
+                return { ...order, status: statusToUpdate };
+            }
+            return order;
+        });
+        const updateUser = {
+            ...user,
+            orders: updatedOrders
+        }
+        dispatch(setUser(updateUser));
+        setDoc(documentRef, updateUser);
+        handleUpdateCustomer(statusToUpdate);
+    }
+
+    const handleUpdateCustomer = (statusToUpdate) => {
+        getDocs(collection(db, 'users')).then((res) => {
+            const allUsers = res?.docs?.map((data) =>
+                data?.data()
+            )
+            if (!!orderDetails?.customerId) {
+                const customer = allUsers.find((item) => item.id === orderDetails?.customerId);
+                const updatedOrders = customer?.orders?.map((order) => {
+                    if (order?.orderId === id) {
+                        return { ...order, status: statusToUpdate };
+                    }
+                    return order;
+                });
+                const updateCustomer = {
+                    ...customer,
+                    orders: updatedOrders
+                }
+                let customerDocRef = doc(db, 'users', orderDetails?.customerId)
+                setDoc(customerDocRef, updateCustomer);
+            }
+            else {
+                const customer = allUsers.find((item) => item.id === orderDetails?.tailorId);
+                const updatedOrders = customer?.orders?.map((order) => {
+                    if (order?.orderId === id) {
+                        return { ...order, status: statusToUpdate };
+                    }
+                    return order;
+                });
+                const updateCustomer = {
+                    ...customer,
+                    orders: updatedOrders
+                }
+                let customerDocRef = doc(db, 'users', orderDetails?.tailorId)
+                setDoc(customerDocRef, updateCustomer);
+            }
+
+        }).catch((error) => {
+            console.log('error handling:', error)
+        });
+    }
     return (
         <div className={classes.container}>
-            <label className={classes.label}>{user?.name}</label>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut ex suscipit, dapibus erat et, lobortis dui. Aenean nisl purus, finibus nec feugiat condimentum, suscipit sed metus. Mauris non vehicula odio. Duis ac quam sit amet dui elementum faucibus. Morbi non lacinia justo. Phasellus pharetra ex nec elit facilisis cursus. Phasellus laoreet placerat libero, nec venenatis velit consectetur nec. Vestibulum quis aliquet ex, at porttitor ipsum. Sed porttitor felis vitae eros lobortis, sit amet pulvinar orci mattis. Suspendisse dignissim tellus non scelerisque tincidunt. Integer a mauris non nisl condimentum facilisis. Morbi in enim sit amet purus dictum ultricies. Phasellus tristique in purus eu faucibus. Sed malesuada est eget sapien aliquet, vel sagittis ipsum elementum. Vestibulum et enim a lorem sodales laoreet. Cras ut aliquam purus. Donec non nisi sollicitudin, scelerisque augue nec, mollis nisi. Duis nec pharetra orci.</p>
+            <label className={classes.label}>{orderDetails?.name}</label>
+            <p>{orderDetails?.bio}</p>
+            <div className={classes.flex}>
+                <p className={classes.heading}>Status: </p>
+                <p className={classes.selection}>{orderDetails?.status}</p>
+            </div>
+            <div className={classes.flex}>
+                <p className={classes.heading}>Address: </p>
+                <p className={classes.selection}>{orderDetails?.address}</p>
+            </div>
+            <div className={classes.flex}>
+                <p className={classes.heading}>Phone: </p>
+                <p className={classes.selection}>{orderDetails?.phone}</p>
+            </div>
+            <div className={classes.flex}>
+                <p className={classes.heading}>Email: </p>
+                <p className={classes.selection}>{orderDetails?.email}</p>
+            </div>
             <div className={classes.flex}>
                 <p className={classes.heading}>Selected Plan: </p>
-                <p className={classes.selection}>Kids</p>
+                <p className={classes.selection}>{orderDetails?.plan}</p>
             </div>
             <div className={classes.flex}>
-                <p className={classes.heading}>Price: </p>
-                <p className={classes.selection}>14000 pkr</p>
+                <p className={classes.heading}>Special Instructions: </p>
+                <p className={classes.selection}>{orderDetails?.instructions}</p>
             </div>
-            <Button className={classes.approve}>Approve</Button>
-            <Button className={classes.cancel}>Cancel</Button>
+            {user?.role === 'Tailor' &&
+                <>
+                    {orderDetails?.status === 'requested' &&
+                        <>
+                            <Button onClick={() => handleUpdateStatus('isActive')} className={classes.approve}>Approve</Button>
+                            <Button onClick={() => handleUpdateStatus('isCancelled')} className={classes.cancel}>Cancel</Button>
+                        </>
+                    }
+                    {orderDetails?.status === 'isActive' &&
+                        <>
+                            <Button onClick={() => handleUpdateStatus('isCompleted')} className={classes.approve}>Mark As Complete</Button>
+                        </>
+                    }
+                    {orderDetails?.status === 'isCompleted' &&
+                        <>
+                            <Button disabled className={classes.approve}>Mark As Complete</Button>
+                        </>
+                    }
+                </>
+            }
+            {user?.role === 'Customer' &&
+                <>
+                    {orderDetails?.status === 'isCompleted' &&
+                        <>
+                            <Button onClick={() => handleUpdateStatus('isDelieverd')} className={classes.approve}>Mark As Delieverd</Button>
+                        </>
+                    }
+                </>
+            }
         </div>
     )
 }

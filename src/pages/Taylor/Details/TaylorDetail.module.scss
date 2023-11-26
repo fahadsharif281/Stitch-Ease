@@ -7,6 +7,10 @@
         margin-bottom: 32px;
     }
 
+    .stepper {
+        margin-bottom: 32px;
+    }
+
     .plan_cards {
         display: flex;
         align-items: center;
@@ -24,17 +28,19 @@
             cursor: auto;
             box-shadow: 0px 0px 8px 0px silver;
 
-            &:hover {
-                box-shadow: 0px 0px 10px 0px $color_primary;
-                font-size: 18px;
-                font-weight: 500;
-            }
+            // &:hover {
+            //     box-shadow: 0px 0px 10px 0px $color_primary;
+            //     font-size: 18px;
+            //     font-weight: 500;
+            // }
         }
 
         .body {
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-height: 350px;
+            overflow: scroll;
         }
     }
 }

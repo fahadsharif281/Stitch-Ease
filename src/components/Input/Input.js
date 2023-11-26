@@ -2,10 +2,10 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import classes from './Input.module.scss'
 
-const Input = ({ label, error, ...props }) => {
+const Input = ({ labelClassName, label, error, ...props }) => {
     return (
         <div className={classes.container}>
-            {label && <Form.Label>{label}</Form.Label>}
+            {label && <Form.Label className={labelClassName}>{label}</Form.Label>}
             <Form.Control
                 {...props}
             />

@@ -5,15 +5,19 @@ import logo from '../assets/images/jpeg/stitch_logo.jpeg';
 import home from '../assets/images/png/home.png';
 import logout from '../assets/images/png/logout.png';
 import orders from '../assets/images/png/orders.png';
+import userImage from '../assets/images/png/user.png';
 import shoppingCart from '../assets/images/png/shopping-cart.png';
 import { Button, Nav } from 'react-bootstrap';
 import Input from '../components/Input/Input';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../redux/reducers/auth/authReducer';
 import { Avatar, MenuItem, Badge } from '@mui/material';
+import { setTailors } from '../redux/reducers/taylor/taylorReducer';
+import { setCart } from '../redux/reducers/customer/cart';
 export const Layout = () => {
     const dispatch = useDispatch();
-    const { user } = useSelector(state => state.auth)
+    const { user } = useSelector(state => state.auth);
+    const { cart } = useSelector(state => state.cart)
     const navigate = useNavigate();
     const [openMenu, setOpenMenu] = useState(false);
     let items = [];
@@ -27,10 +31,16 @@ export const Layout = () => {
         {
             name: 'Orders',
             src: orders,
-            key: 'Favorite',
+            key: 'Orders',
             to: '/tailor/orders',
-            badge: 4
-        }
+            badge: !!user?.orders?.length && user?.orders?.length
+        },
+        {
+            name: 'Profile',
+            src: userImage,
+            key: 'Profile',
+            to: '/tailor/profile',
+        },
     ]
     let customerItems = [
         {
@@ -44,7 +54,7 @@ export const Layout = () => {
             src: orders,
             key: 'Favorite',
             to: '/customer/orders',
-            badge: 4
+            badge: !!user?.orders?.length && user?.orders?.length
         }
     ]
     if (user?.role === 'Tailor') {
@@ -59,9 +69,10 @@ export const Layout = () => {
     }
     const handleSelect = () => {
         setOpenMenu(!openMenu);
-        { user?.role === 'Tailor' && navigate('/tailor/profile') }
+        { user?.role === 'Tailor' && navigate('/tailor/update-profile') }
         { user?.role === 'Customer' && navigate('/customer/profile') }
     }
+
     return (
         <div className={classes.container}>
             <div className={user?.role === 'Tailor' ? classes.tailor_side_bar : classes.customer_side_bar}>
@@ -76,7 +87,7 @@ export const Layout = () => {
                                     isActive ? classes.item_active : classes.item
                                 }>
                                 {item?.badge &&
-                                    <Badge badgeContent={4} color='primary' />
+                                    <Badge badgeContent={item?.badge} color='primary' />
                                 }
                                 <img src={item.src} width='23px' height='23px' />
                                 <div className={classes.link}>{item.name}</div>
@@ -86,6 +97,8 @@ export const Layout = () => {
 
                     <Nav.Item onClick={() => {
                         dispatch(setUser(undefined));
+                        dispatch(setTailors(undefined));
+                        dispatch(setCart(undefined));
                         navigate('/login')
 
                     }} className={classes.item}>
@@ -105,11 +118,15 @@ export const Layout = () => {
                         />
                     </div>
                     {user?.role === 'Tailor' &&
-                        <Button disabled className={classes.not_verified}>not verified</Button>
+                        <>
+                            {!user?.portFolio?.length && <Button disabled className={classes.not_verified}>not verified</Button>}
+                            {!!user?.portFolio?.length && <Button disabled className={classes.verified}>verified</Button>}
+                        </>
+
                     }
                     {user?.role === 'Customer' &&
-                        <div className={classes.cart}>
-                            <Badge badgeContent={4} color='primary' />
+                        <div onClick={() => navigate('/customer/cart')} className={classes.cart}>
+                            <Badge badgeContent={cart ? 1 : 0} color='primary' />
                             <img width='35px' src={shoppingCart} />
                         </div>
                     }

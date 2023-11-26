@@ -61,7 +61,7 @@
         .image_container {
             display: flex;
             justify-content: center;
-            background-color: $color_secondary;
+            background-color: $color_primary;
 
             img {
                 cursor: pointer;
@@ -98,7 +98,7 @@
                 display: flex;
                 padding: 15px;
 
-                background-color: $color_secondary;
+                background-color: rgb(136, 239, 136);
                 border-radius: 10px;
 
                 img {
@@ -152,14 +152,26 @@
 
         .not_verified {
             width: 200px;
-            background-color: red;
-            border: 1px solid red;
+            background-color: $color_not_verfied;
+            border: 1px solid $color_not_verfied;
 
             :active {
-                background-color: red;
-                border: 1px solid red;
+                background-color: $color_not_verfied;
+                border: 1px solid $color_not_verfied;
             }
         }
+
+        .verified {
+            width: 200px;
+            background-color: $color_verfied;
+            border: 1px solid $color_verfied;
+
+            :active {
+                background-color: $color_verfied;
+                border: 1px solid $color_verfied;
+            }
+        }
+
 
         .outlet {
             padding: 30px 40px;

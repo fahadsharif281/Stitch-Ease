@@ -2,10 +2,11 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { firebaseConfig } from "../firebase";
 import { initializeApp } from "firebase/app";
 
+// Initialize Firebase 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+
 const useFirebase = () => {
-    // Initialize Firebase 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
     const signUpWithEmailAndPassword = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password)
     }

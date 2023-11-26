@@ -1,46 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DetailCard from '../../../components/Card/DetailCard'
 import { useSelector } from 'react-redux';
 import classes from './TaylorDetail.module.scss';
+import { useParams } from 'react-router-dom';
+import { getDownloadURL, getStorage, listAll, ref } from 'firebase/storage';
+import SwipeableTextMobileStepper from '../../../components/SwipeableStepper/SwipeableStepper';
+
 
 const TaylorDetail = () => {
-    const { user } = useSelector(state => state.auth);
-    const plans = [
-        {
-            title: 'Kids',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut ex suscipit, dapibus erat et, lobortis dui. Aenean nisl purus, finibus nec feugiat condimentum',
-            rates: '3000 pkr'
-        },
-        {
-            title: 'Mens',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut ex suscipit, dapibus erat et, lobortis dui. Aenean nisl purus, finibus nec feugiat condimentum',
-            rates: '25000 pkr'
-        },
-        {
-            title: 'Woman',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut ex suscipit, dapibus erat et, lobortis dui. Aenean nisl purus, finibus nec feugiat condimentum',
-            rates: '12000 pkr'
-        },
-        {
-            title: 'Formal',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut ex suscipit, dapibus erat et, lobortis dui. Aenean nisl purus, finibus nec feugiat condimentum',
-            rates: '40000 pkr'
-        },
-        {
-            title: 'Casual',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut ex suscipit, dapibus erat et, lobortis dui. Aenean nisl purus, finibus nec feugiat condimentum',
-            rates: '9000 pkr'
-        }
-    ]
+    const { tailors } = useSelector(state => state.tailors);
+    const { id } = useParams();
+    const storage = getStorage();
+    const [selectedUser, setSelectedUser] = useState();
+    const [images, setImages] = useState([])
+    useEffect(() => {
+        tailors?.filter((items) => {
+            if (items.id === id) {
+                setSelectedUser(items)
+            }
+            return items
+        })
+    }, []);
+
+    useEffect(() => {
+        const listRef = ref(storage, `${id}/`);
+        listAll(listRef).then((data) => {
+            data.items.forEach((item) => {
+                getDownloadURL(item).then((url) => {
+                    if (!images.includes(url)) {
+                        setImages(pre => [...pre, url])
+                    }
+                })
+            })
+        })
+    }, [])
     return (
         <div className={classes.container}>
-            <label className={classes.label}>{user?.name}</label>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. .</p>
-            {/* <p className={classes.label}>Catalogue</p> */}
-
-            <label className={classes.label}>Specialization</label>
+            <label className={classes.label}>{selectedUser?.name}</label>
+            <p>{selectedUser?.bio}</p>
+            {!!images.length &&
+                <div className={classes.stepper}>
+                    <SwipeableTextMobileStepper images={images} />
+                </div>
+            }
             <div className={classes.plan_cards}>
-                {plans?.map((items, index) => {
+                {selectedUser?.portFolio?.map((items, index) => {
                     return (
                         <>
                             <div className={classes.plan}>
@@ -51,6 +55,7 @@ const TaylorDetail = () => {
                                     text={
                                         <div style={{ minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                             <p>{items.rates}</p>
+                                            <p>{items.price} pkr</p>
                                             <p>{items.description}</p>
                                         </div>}
                                 />

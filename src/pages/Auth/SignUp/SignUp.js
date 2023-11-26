@@ -24,7 +24,8 @@ const SignUp = () => {
             phone: '',
             role: { value: 'Tailor', label: 'Tailor' },
             cnic: '',
-            fullName: ''
+            fullName: '',
+            bio: ''
         },
         validationSchema: Yup.object().shape({
             email: Yup.string().email('Invalid email')
@@ -40,10 +41,10 @@ const SignUp = () => {
             address: Yup.string().required('Required').min(5, 'Minium 5 characters required').max(50, 'Cannot exceed 50 characters'),
             phone: Yup.string().required('Required'),
             cnic: Yup.string().required('Required'),
-            fullName: Yup.string().required('Required')
+            fullName: Yup.string().required('Required'),
+            bio: Yup.string().required('Required')
         }),
         onSubmit: async (values) => {
-            console.log('123')
             signUpWithEmailAndPassword(values.email, values.password).then((res) => {
                 const userCollection = collection(db, "users");
                 const userDocRef = doc(userCollection, res.user.uid); // Assuming 'res.user.uid' holds the UID
@@ -53,7 +54,8 @@ const SignUp = () => {
                     cnic: values.cnic,
                     phone: values.phone,
                     role: values.role.value,
-                    name: values.fullName
+                    name: values.fullName,
+                    bio: values.bio
                 })
                 toast.success("User Registered Successfully", {
                     position: "top-right",
@@ -134,15 +136,26 @@ const SignUp = () => {
                     error={formik.touched.fullName && formik.errors.fullName && formik.errors.fullName}
                 />
                 {formik.values.role.value === 'Tailor' &&
-                    <Input
-                        label={'CNIC'}
-                        type='text'
-                        placeholder='####-######-#'
-                        value={formik.values.cnic}
-                        onChange={formik.handleChange('cnic')}
-                        onBlur={formik.handleBlur('cnic')}
-                        error={formik.touched.cnic && formik.errors.cnic && formik.errors.cnic}
-                    />
+                    <>
+                        <Input
+                            label={'CNIC'}
+                            type='text'
+                            placeholder='####-######-#'
+                            value={formik.values.cnic}
+                            onChange={formik.handleChange('cnic')}
+                            onBlur={formik.handleBlur('cnic')}
+                            error={formik.touched.cnic && formik.errors.cnic && formik.errors.cnic}
+                        />
+                        <Input
+                            label={'Add Bio'}
+                            as="textarea"
+                            rows={3}
+                            value={formik.values.bio}
+                            onChange={formik.handleChange('bio')}
+                            onBlur={formik.handleBlur('bio')}
+                            error={formik.touched.bio && formik.errors.bio && formik.errors.bio}
+                        />
+                    </>
                 }
 
                 <PhoneInputField
@@ -162,6 +175,7 @@ const SignUp = () => {
                     }}
                     value={formik.values.role}
                     options={options} />
+
                 <Nav.Link className={classes.already_member} onClick={() => navigate('/login')}>Already a member?</Nav.Link>
                 <Button type='submit' className={classes.submit}>Sign Up</Button>
             </form>
