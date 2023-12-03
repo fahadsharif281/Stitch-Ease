@@ -22,7 +22,7 @@ const HomeCustomer = () => {
             const allUsers = res?.docs?.map((data) =>
                 data?.data()
             )
-            dispatch(setTailors(allUsers.filter((item) => item.role === 'Tailor')))
+            dispatch(setTailors(allUsers.filter((item) => item.role === 'Tailor' && !!item?.portFolio?.length)))
         }).catch((error) => {
             console.log('error handling:', error)
         });
@@ -42,7 +42,7 @@ const HomeCustomer = () => {
                         title={item.name}
                         ratingProps={{
                             readOnly: true,
-                            defaultValue: 3
+                            defaultValue: item?.averageRating
                         }}
                     />
                 </>)

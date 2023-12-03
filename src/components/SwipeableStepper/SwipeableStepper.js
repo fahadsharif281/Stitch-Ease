@@ -44,6 +44,7 @@ const SwipeableTextMobileStepper = ({ images = [] }) => {
                                     maxWidth: 400,
                                     overflow: 'hidden',
                                     width: '100%',
+                                    objectFit: 'contain'
                                 }}
                                 src={step}
                             />

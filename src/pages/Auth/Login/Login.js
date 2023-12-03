@@ -46,10 +46,18 @@ const Login = () => {
                         draggable: true,
                     })
                     let getUserData = res?.data();
-                    dispatch(setUser({
-                        ...getUserData,
-                        id: response.user.uid
-                    }))
+                    if (getUserData?.role === 'Tailor') {
+                        dispatch(setUser({
+                            ...getUserData,
+                            id: response.user.uid
+                        }))
+                    }
+                    else {
+                        dispatch(setUser({
+                            ...getUserData,
+                            id: response.user.uid,
+                        }))
+                    }
                     { getUserData?.role === 'Tailor' && navigate('/tailor/home') }
                     { getUserData?.role === 'Customer' && navigate('/customer/home') }
 

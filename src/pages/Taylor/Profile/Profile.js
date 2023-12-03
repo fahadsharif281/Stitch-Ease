@@ -20,13 +20,11 @@ const Profile = () => {
         listAll(listRef).then((data) => {
             data.items.forEach((item) => {
                 getDownloadURL(item).then((url) => {
-                    if (!images.includes(url)) {
-                        setImages(pre => [...pre, url])
-                    }
+                    setImages(pre => [...pre, url])
                 })
             })
         })
-    }, [])
+    }, []);
     return (
         <div className={classes.container}>
             <div className={classes.flex}>

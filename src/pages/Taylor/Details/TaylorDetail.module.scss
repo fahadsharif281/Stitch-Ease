@@ -1,6 +1,10 @@
 @import '../../../utils/variables/colors.scss';
 
 .container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 30px;
+
     .label {
         font-size: 28px;
         font-weight: 600;

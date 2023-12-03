@@ -5,11 +5,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: auto;
+    background-image: url('../../../assets/images/jpeg/sign_up_bg.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    overflow: auto;
 
     .form {
-        padding: 100px 0px;
-        width: 300px;
+        padding: 50px 100px;
+        margin: 50px 0px;
+        width: 550px;
+        background-color: white;
+        border-radius: 30px;
+        overflow: auto;
     }
 
     .submit {

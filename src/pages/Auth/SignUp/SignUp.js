@@ -40,23 +40,36 @@ const SignUp = () => {
                 .oneOf([Yup.ref('password'), null], 'Confirm password must match with password'),
             address: Yup.string().required('Required').min(5, 'Minium 5 characters required').max(50, 'Cannot exceed 50 characters'),
             phone: Yup.string().required('Required'),
-            cnic: Yup.string().required('Required'),
             fullName: Yup.string().required('Required'),
-            bio: Yup.string().required('Required')
         }),
         onSubmit: async (values) => {
             signUpWithEmailAndPassword(values.email, values.password).then((res) => {
                 const userCollection = collection(db, "users");
                 const userDocRef = doc(userCollection, res.user.uid); // Assuming 'res.user.uid' holds the UID
-                setDoc(userDocRef, {
-                    email: res.user.email,
-                    address: values.address,
-                    cnic: values.cnic,
-                    phone: values.phone,
-                    role: values.role.value,
-                    name: values.fullName,
-                    bio: values.bio
-                })
+                if (values.role.value === 'Tailor') {
+                    setDoc(userDocRef, {
+                        email: res.user.email,
+                        address: values.address,
+                        cnic: values.cnic,
+                        phone: values.phone,
+                        role: values.role.value,
+                        name: values.fullName,
+                        bio: values.bio,
+                        ratings: [],
+                        averageRating: 0
+                    })
+                }
+                else {
+                    setDoc(userDocRef, {
+                        email: res.user.email,
+                        address: values.address,
+                        cnic: values.cnic,
+                        phone: values.phone,
+                        role: values.role.value,
+                        name: values.fullName,
+                        bio: values.bio
+                    })
+                }
                 toast.success("User Registered Successfully", {
                     position: "top-right",
                     autoClose: 5000,

@@ -5,11 +5,16 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: auto;
+    background-image: url('../../../assets/images/jpeg/login_container_bg.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
 
     .form {
-        padding: 100px 0px;
-        width: 300px;
+        padding: 100px 100px;
+        width: 550px;
+        background-color: white;
+        border-radius: 30px;
     }
 
     .submit {

@@ -26,8 +26,7 @@ const EditProfile = () => {
         },
         validationSchema: Yup.object().shape({
             address: Yup.string().required('Required').min(5, 'Minium 5 characters required').max(50, 'Cannot exceed 50 characters'),
-            phone: Yup.string().required('Required'),
-            cnic: Yup.string().required('Required'),
+            phone: Yup.string().required('Required')
         }),
         onSubmit: async (values) => {
             const updateUser = {

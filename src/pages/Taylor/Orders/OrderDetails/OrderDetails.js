@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import classes from './OrderDetails.module.scss';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
 import useFirebase from '../../../../utils/hooks/useFirebase';
 import { setUser } from '../../../../redux/reducers/auth/authReducer';
+import { Rating } from '@mui/material';
+import whatsAppIcon from '../../../../assets/images/png/whatsapp.png';
 
 const OrderDetails = () => {
     const { user } = useSelector(state => state.auth);
     const [orderDetails, setOrderDetails] = useState();
+    const [show, setShow] = useState(false);
+    const [rating, setRating] = useState(0);
     const dispatch = useDispatch();
     const { app } = useFirebase();
     const db = getFirestore(app);
@@ -22,7 +26,7 @@ const OrderDetails = () => {
             }
             return item
         })
-    }, []);
+    }, [user]);
     const handleUpdateStatus = (statusToUpdate) => {
         const updatedOrders = user?.orders?.map((order) => {
             if (order?.orderId === id) {
@@ -67,9 +71,23 @@ const OrderDetails = () => {
                     }
                     return order;
                 });
+                const sumOfRatingsCount = customer.ratings?.reduce((accumulator, currentRating) => {
+                    // Convert the count property to a number before adding to the accumulator
+                    const count = Number(currentRating.count);
+                    return accumulator + count;
+                }, 0);
+                const averageRating =
+                    customer?.ratings?.length > 0
+                        ? sumOfRatingsCount / customer?.ratings?.length
+                        : rating;
                 const updateCustomer = {
                     ...customer,
-                    orders: updatedOrders
+                    orders: updatedOrders,
+                    ratings: [...customer?.ratings, {
+                        id: user?.id,
+                        count: rating
+                    }],
+                    averageRating: Math.round(averageRating)
                 }
                 let customerDocRef = doc(db, 'users', orderDetails?.tailorId)
                 setDoc(customerDocRef, updateCustomer);
@@ -79,6 +97,25 @@ const OrderDetails = () => {
             console.log('error handling:', error)
         });
     }
+
+    const handleAddRating = () => {
+        handleShow();
+        handleUpdateStatus('isDelieverd')
+    }
+    const handleShow = () => {
+        setShow(prev => !prev);
+    }
+
+    const handleWhatsAppClick = () => {
+        const phoneNumber = orderDetails?.phone; // Replace with the recipient's phone number
+        const message = 'Hello, I took your number from Stitch Ease!'; // Replace with your message
+
+        // Create the WhatsApp link
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+        // Open the link in a new tab or window
+        window.open(whatsappLink, '_blank');
+    };
     return (
         <div className={classes.container}>
             <label className={classes.label}>{orderDetails?.name}</label>
@@ -131,11 +168,27 @@ const OrderDetails = () => {
                 <>
                     {orderDetails?.status === 'isCompleted' &&
                         <>
-                            <Button onClick={() => handleUpdateStatus('isDelieverd')} className={classes.approve}>Mark As Delieverd</Button>
+                            <Button onClick={handleShow} className={classes.approve}>Mark As Delieverd</Button>
                         </>
                     }
+                    <Button className={classes.approve} onClick={handleWhatsAppClick}>
+                        <img src={whatsAppIcon} />
+                        WhatsApp
+                    </Button>
                 </>
             }
+            <Modal show={show}>
+                <Modal.Body className={classes.modal_body}>
+                    <p>What was your experice with {orderDetails?.name?.toLowerCase()}?</p>
+                    <p className={classes.interest_p}>we glad to know your thoughts about {orderDetails?.name?.toLowerCase()}, we will surely appricate your interest to rate this tailor.</p>
+                    <Rating
+                        onChange={(e) => setRating(e?.target?.defaultValue)}
+                    />
+                    <div className={classes.submit_container}>
+                        <Button disabled={rating === 0 ? true : false} onClick={handleAddRating} className={classes.submit_rating}>Submit</Button>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </div>
     )
 }

@@ -12,7 +12,7 @@ const CustomerOrders = () => {
     }
     return (
         <div>
-            <label className={classes.label}>You Have {!!user?.orders?.length && user?.orders?.length} Orders {user?.name}</label>
+            <label className={classes.label}>You Have {!!user?.orders?.length ? user?.orders?.length : 0} Orders {user?.name}</label>
             {user?.orders?.map((items) => {
                 return (
                     <>

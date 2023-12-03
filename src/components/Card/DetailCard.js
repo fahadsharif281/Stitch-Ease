@@ -1,7 +1,6 @@
 import { Rating } from '@mui/material';
 import React from 'react'
 import { Card } from 'react-bootstrap';
-import classes from './DetailCard.module.scss';
 
 const DetailCard = ({ textClassName, bodyClassName, header, title, text, ratingProps, ...props }) => {
     return (

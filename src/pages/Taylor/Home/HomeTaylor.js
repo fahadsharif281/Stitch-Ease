@@ -4,7 +4,7 @@ import classes from './HomeTaylor.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ApplicationToast } from '../../../components/Toast/ApplicationToast';
-import { Alert } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import useFirebase from '../../../utils/hooks/useFirebase';
 import { setTailors } from '../../../redux/reducers/taylor/taylorReducer';
@@ -24,7 +24,7 @@ const HomeTaylor = () => {
       const allUsers = res?.docs?.map((data) =>
         data?.data()
       )
-      dispatch(setTailors(allUsers.filter((item) => item.role === 'Tailor')))
+      dispatch(setTailors(allUsers.filter((item) => item.role === 'Tailor' && !!item?.portFolio?.length && item?.id !== user?.id)))
     }).catch((error) => {
       console.log('error handling:', error)
     });
@@ -35,9 +35,11 @@ const HomeTaylor = () => {
       {!user?.portFolio?.length &&
         <Alert variant='danger'>Complete Your Profile! Please Add Your Work and Pricing From Your Profile Until Unless You Will Not Be Featured. </Alert>}
       <label className={classes.label}>Welcome! {user?.name}</label>
-      {tailors?.map((item) => {
+
+      {tailors?.map((item, index) => {
         return (<>
           <DetailCard
+            key={index}
             onClick={() => handleClick(item.id)}
             className={classes.container}
             textClassName={classes.text}
@@ -46,7 +48,7 @@ const HomeTaylor = () => {
             title={item.name}
             ratingProps={{
               readOnly: true,
-              defaultValue: 3
+              defaultValue: item?.averageRating
             }}
           />
         </>)

@@ -73,11 +73,20 @@ export const Layout = () => {
         { user?.role === 'Customer' && navigate('/customer/profile') }
     }
 
+    const handleLogoNavigate = () => {
+        if (user?.role === 'Tailor') {
+            navigate('/tailor/home')
+        }
+        else {
+            navigate('/customer/home')
+        }
+    }
+
     return (
         <div className={classes.container}>
             <div className={user?.role === 'Tailor' ? classes.tailor_side_bar : classes.customer_side_bar}>
                 <div className={classes.image_container}>
-                    <img src={logo} width='180px' /></div>
+                    <img onClick={handleLogoNavigate} src={logo} width='300px' /></div>
                 <div className={classes.items}>
                     {items.map((item) => {
                         return (

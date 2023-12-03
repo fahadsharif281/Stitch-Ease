@@ -1,6 +1,10 @@
 @import '../../../../utils/variables/colors.scss';
 
 .container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 30px;
+
     .label {
         font-size: 28px;
         font-weight: 600;
@@ -26,11 +30,17 @@
         color: $color_primary;
         border: 1px solid $color_verfied;
         margin-top: 20px;
+        margin-right: 4px;
 
         &:active {
             background-color: $color_verfied;
             color: $color_primary;
             border: 1px solid $color_verfied;
+        }
+
+        img {
+            width: 24px;
+            margin-right: 10px;
         }
     }
 
@@ -39,12 +49,41 @@
         color: $color_secondary;
         border: 1px solid;
         margin-top: 20px;
-        margin-left: 4px;
 
         &:active {
             background-color: $color_primary;
             color: $color_secondary;
             border: 1px solid;
         }
+    }
+}
+
+.modal_body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 40px;
+
+    .submit_container {
+        width: 100%;
+
+        .submit_rating {
+            background-color: $color_verfied;
+            color: $color_primary;
+            border: 1px solid $color_verfied;
+            margin-top: 20px;
+            width: 100%;
+
+            &:active {
+                background-color: $color_verfied;
+                color: $color_primary;
+                border: 1px solid $color_verfied;
+            }
+        }
+    }
+
+    .interest_p {
+        text-align: center;
+        color: #929292;
     }
 }
