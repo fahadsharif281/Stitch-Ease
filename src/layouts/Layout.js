@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Layout.module.scss';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/jpeg/stitch_logo.jpeg';
 import home from '../assets/images/png/home.png';
 import logout from '../assets/images/png/logout.png';
@@ -14,12 +14,30 @@ import { setUser } from '../redux/reducers/auth/authReducer';
 import { Avatar, MenuItem, Badge } from '@mui/material';
 import { setTailors } from '../redux/reducers/taylor/taylorReducer';
 import { setCart } from '../redux/reducers/customer/cart';
+import useFirebase from '../utils/hooks/useFirebase';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
 export const Layout = () => {
-    const dispatch = useDispatch();
+    const { app } = useFirebase();
+    const db = getFirestore(app);
     const { user } = useSelector(state => state.auth);
-    const { cart } = useSelector(state => state.cart)
+    const { cart } = useSelector(state => state.cart);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation();
     const [openMenu, setOpenMenu] = useState(false);
+    const [allTailors, setAllTailors] = useState([]);
+
+    useEffect(() => {
+        getDocs(collection(db, 'users')).then((res) => {
+            const allUsers = res?.docs?.map((data) =>
+                data?.data()
+            )
+            setAllTailors(allUsers.filter((item) => item.role === 'Tailor' && !!item?.portFolio?.length && item?.id !== user?.id))
+        }).catch((error) => {
+            console.log('error handling:', error)
+        });
+    }, [])
+
     let items = [];
     let tailorItems = [
         {
@@ -82,6 +100,14 @@ export const Layout = () => {
         }
     }
 
+    const handleShowSeacrh = () => {
+        return location.pathname === '/tailor/home' || location.pathname === '/customer/home'
+    }
+
+    const handleFilter = (e) => {
+        const filterTailors = allTailors?.filter((item) => item?.name?.toLowerCase()?.includes(e?.target?.value?.toLowerCase()) || item?.bio?.toLowerCase()?.includes(e?.target?.value?.toLowerCase()) || item?.address?.toLowerCase()?.includes(e?.target?.value?.toLowerCase()))
+        dispatch(setTailors(filterTailors))
+    }
     return (
         <div className={classes.container}>
             <div className={user?.role === 'Tailor' ? classes.tailor_side_bar : classes.customer_side_bar}>
@@ -120,12 +146,16 @@ export const Layout = () => {
             </div>
             <div className={classes.content}>
                 <div className={classes.header_flex}>
-                    <div className={classes.search_bar}>
-                        <Input
-                            type='text'
-                            placeholder='Search ...'
-                        />
-                    </div>
+                    {handleShowSeacrh() &&
+                        <div className={classes.search_bar}>
+                            <Input
+                                onChange={handleFilter}
+                                containerClassName={classes.input_container}
+                                type='text'
+                                placeholder='Search ...'
+                            />
+                        </div>
+                    }
                     {user?.role === 'Tailor' &&
                         <>
                             {!user?.portFolio?.length && <Button disabled className={classes.not_verified}>not verified</Button>}

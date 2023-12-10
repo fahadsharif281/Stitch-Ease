@@ -9,18 +9,19 @@ import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/reducers/auth/authReducer';
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
-const AddOns = ({ handleShow }) => {
+import { v4 as uuid4 } from 'uuid';
+const AddOns = ({ handleShow, editData }) => {
     const { user } = useSelector(state => state.auth);
     const { app } = useFirebase();
     const storage = getStorage();
     const db = getFirestore(app);
-    const documentRef = doc(db, 'users', user?.id)
+    const documentRef = doc(db, 'users', user?.id);
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
-            title: '',
-            price: '',
-            description: '',
+            title: editData?.title || '',
+            price: editData?.price || '',
+            description: editData?.description || '',
             image: ''
         },
         validationSchema: Yup.object().shape({
@@ -32,25 +33,47 @@ const AddOns = ({ handleShow }) => {
                 .required('Required'),
         }),
         onSubmit: async (values) => {
-            let portFolio = [];
-            if (user?.portFolio) {
-                portFolio = [...user?.portFolio]
+            if (editData) {
+                const updatedPortFolio = (user?.portFolio || []).map((item) => {
+                    if (editData?.id === item?.id) {
+                        return {
+                            ...item,
+                            title: values.title,
+                            description: values.description,
+                            price: values.price,
+                        };
+                    }
+                    return item;
+                });
+                const updateUser = {
+                    ...user,
+                    portFolio: updatedPortFolio
+                }
+                setDoc(documentRef, updateUser);
+                dispatch(setUser(updateUser));
             }
-            if (!!values.image) {
-                const storageRef = ref(storage, `${user?.id}/${values.image.name}`);
-                uploadBytes(storageRef, values.image);
+            else {
+                let portFolio = [];
+                if (user?.portFolio) {
+                    portFolio = [...user?.portFolio]
+                }
+                if (!!values.image) {
+                    const storageRef = ref(storage, `${user?.id}/${values.image.name}`);
+                    uploadBytes(storageRef, values.image);
+                }
+                portFolio.push({
+                    title: values.title,
+                    price: values.price,
+                    description: values.description,
+                    id: uuid4()
+                })
+                const updateUser = {
+                    ...user,
+                    portFolio: portFolio
+                }
+                setDoc(documentRef, updateUser);
+                dispatch(setUser(updateUser));
             }
-            portFolio.push({
-                title: values.title,
-                price: values.price,
-                description: values.description,
-            })
-            const updateUser = {
-                ...user,
-                portFolio: portFolio
-            }
-            setDoc(documentRef, updateUser);
-            dispatch(setUser(updateUser));
             handleShow();
         }
     })

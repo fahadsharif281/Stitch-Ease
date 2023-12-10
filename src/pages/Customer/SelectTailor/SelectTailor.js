@@ -65,9 +65,8 @@ const SelectTailor = () => {
                                     title={items?.title}
                                     text={
                                         <div style={{ minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                            <p>{items.rates}</p>
                                             <p>{items.price} pkr</p>
-                                            <p>{items.description}</p>
+                                            <p className={classes.card_description}>{items.description}</p>
                                         </div>}
                                 />
                             </div>
