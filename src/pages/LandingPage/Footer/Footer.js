@@ -22,8 +22,6 @@ export const Footer = () => {
             </div>
             <div>
                 <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#">FAQ</Nav.Link>
-                <Nav.Link href="#">ContactUs</Nav.Link>
                 <Nav.Link href="#aboutUs">About Us</Nav.Link>
             </div>
             <div>

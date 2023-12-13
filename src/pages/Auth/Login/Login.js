@@ -78,10 +78,10 @@ const Login = () => {
     })
 
     useEffect(() => {
-        if (user?.role?.value === 'Tailor') {
+        if (user?.role === 'Tailor') {
             navigate('/tailor/home');
         } else
-            if (user?.role?.value === 'Customer') {
+            if (user?.role === 'Customer') {
                 navigate('/customer/home')
             }
             else { }

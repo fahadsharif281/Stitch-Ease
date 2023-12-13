@@ -1,35 +1,46 @@
-.container{
-    .heading{
+.container {
+    .heading {
         font-size: 75px;
         text-align: center;
         font-style: italic;
     }
-    .section{
+
+    .section {
         background-color: black;
         color: white;
         padding: 15px 40px;
         text-align: center;
     }
-    .customer_heading{
+
+    .customer_heading {
         font-size: 60px;
         text-align: center;
     }
-    .customers{
+
+    .customer_des {
+        font-size: 20px;
+        color: #757575;
+    }
+
+    .customers {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         flex-direction: row;
 
     }
-    .customers_contain{
+
+    .customers_contain {
         margin-right: 100px;
     }
-    .customers_reviews{
+
+    .customers_reviews {
         max-width: 250px;
         text-align: center;
     }
-    .customers_img{
+
+    .customers_img {
         border-radius: 10px;
         border: 1px solid white;
     }
