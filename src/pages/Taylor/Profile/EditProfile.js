@@ -23,6 +23,7 @@ const EditProfile = () => {
             address: user?.address || '',
             phone: `+${user?.phone}` || '',
             cnic: user?.cnic || '',
+            bio: user?.bio || ''
         },
         validationSchema: Yup.object().shape({
             address: Yup.string().required('Required').min(5, 'Minium 5 characters required').max(50, 'Cannot exceed 50 characters'),
@@ -33,7 +34,8 @@ const EditProfile = () => {
                 ...user,
                 address: values?.address,
                 phone: values?.phone,
-                cnic: values?.cnic
+                cnic: values?.cnic,
+                bio: values?.bio
             }
             setDoc(documentRef, updateUser);
             dispatch(setUser(updateUser));
@@ -72,15 +74,26 @@ const EditProfile = () => {
                     error={formik.touched.address && formik.errors.address && formik.errors.address}
                 />
                 {user?.role === 'Tailor' &&
-                    <Input
-                        label={'CNIC'}
-                        type='text'
-                        placeholder='####-######-#'
-                        value={formik.values.cnic}
-                        onChange={formik.handleChange('cnic')}
-                        onBlur={formik.handleBlur('cnic')}
-                        error={formik.touched.cnic && formik.errors.cnic && formik.errors.cnic}
-                    />
+                    <>
+                        <Input
+                            label={'CNIC'}
+                            type='text'
+                            placeholder='####-######-#'
+                            value={formik.values.cnic}
+                            onChange={formik.handleChange('cnic')}
+                            onBlur={formik.handleBlur('cnic')}
+                            error={formik.touched.cnic && formik.errors.cnic && formik.errors.cnic}
+                        />
+                        <Input
+                            label={'Add Bio'}
+                            as="textarea"
+                            rows={3}
+                            value={formik.values.bio}
+                            onChange={formik.handleChange('bio')}
+                            onBlur={formik.handleBlur('bio')}
+                            error={formik.touched.bio && formik.errors.bio && formik.errors.bio}
+                        />
+                    </>
                 }
 
                 <PhoneInputField

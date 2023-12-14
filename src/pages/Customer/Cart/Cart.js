@@ -26,11 +26,13 @@ const Cart = () => {
     const formik = useFormik({
         initialValues: {
             plan: '',
-            instructions: ''
+            instructions: '',
+            payment: ''
         },
         validationSchema: Yup.object().shape({
             plan: Yup.string().required('Required'),
             instructions: Yup.string().required('Required'),
+            payment: Yup.string().required('Required'),
         }),
         onSubmit: (values) => {
             handlPlaceOrder(values);
@@ -43,6 +45,13 @@ const Cart = () => {
         title: option.title,
         price: option.price,
     }));
+
+    const formattedPayments = [{
+        value: 'Cash On Delivery',
+        label: `Cash On Delivery`,
+        title: 'Cash On Delivery',
+        price: 'Cash On Delivery',
+    }]
 
     const handlPlaceOrder = (values) => {
         let orders = [];
@@ -133,6 +142,20 @@ const Cart = () => {
                         />
                         {formik.touched.plan && formik.errors.plan && formik.errors.plan &&
                             <Form.Text>{formik.errors.plan}</Form.Text>
+                        }
+                    </div>
+                    <div className={classes.plan_container}>
+                        <p className={classes.select_plan}>Select Payment Method:</p>
+                        <Select
+                            isClearable
+                            options={formattedPayments}
+                            value={formattedPayments.find((option) => option.value === formik.values.payment)}
+                            onChange={(option) => formik.setFieldValue('payment', option ? option.value : '')}
+                            onBlur={formik.handleBlur('payment')}
+
+                        />
+                        {formik.touched.payment && formik.errors.payment && formik.errors.payment &&
+                            <Form.Text>{formik.errors.payment}</Form.Text>
                         }
                     </div>
                     <div className={classes.plan_container}>
